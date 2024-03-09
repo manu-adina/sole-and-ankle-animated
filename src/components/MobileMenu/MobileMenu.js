@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { keyframes, css } from 'styled-components/macro';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
-import { QUERIES, WEIGHTS } from '../../constants';
+import { WEIGHTS } from '../../constants';
 
 import UnstyledButton from '../UnstyledButton';
 import Icon from '../Icon';
@@ -12,6 +12,7 @@ import VisuallyHidden from '../VisuallyHidden';
 const MobileMenu = ({ isOpen, onDismiss }) => {
   return (
     <Overlay isOpen={isOpen} onDismiss={onDismiss}>
+      <Backdrop />
       <Content aria-label="Menu">
         <CloseButton onClick={onDismiss}>
           <Icon id="close" />
@@ -36,20 +37,45 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
   );
 };
 
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const Backdrop = styled.div`
+  position: absolute;
+  animation: ${fadeIn} 250ms ease-out forwards;
+  inset: 0;
+  background: var(--color-backdrop);
+`;
+
 const Overlay = styled(DialogOverlay)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-backdrop);
+  inset: 0;
+  background: transparent;
   display: flex;
   justify-content: flex-end;
 `;
 
 const Content = styled(DialogContent)`
-  background: white;
+  position: relative;
   width: 300px;
+  animation: ${slideIn} 250ms ease-out both;
+  animation-delay: 100ms;
+  background: white;
   height: 100%;
   padding: 24px 32px;
   display: flex;
@@ -57,6 +83,8 @@ const Content = styled(DialogContent)`
 `;
 
 const CloseButton = styled(UnstyledButton)`
+  animation: ${fadeIn} 250ms ease-out both;
+  animation-delay: 500ms;
   position: absolute;
   top: 10px;
   right: 0;
@@ -70,6 +98,8 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled.a`
+  animation: ${fadeIn} 250ms ease-out both;
+  animation-delay: 500ms;
   color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
   text-decoration: none;
@@ -84,6 +114,7 @@ const NavLink = styled.a`
 const Filler = styled.div`
   flex: 1;
 `;
+
 const Footer = styled.footer`
   flex: 1;
   display: flex;
